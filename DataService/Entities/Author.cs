@@ -24,7 +24,7 @@ namespace DataService.Entities
         [StringLength(20, MinimumLength = 2, ErrorMessage = "Invalid last name length")]
         public string LastName { get; set; }
         [DefaultValue(0)]
-        public int BookAmount { get; set; }
+        public int? BookAmount { get; set; }
 
         public virtual IEnumerable<Book> Books { get; set;}
     }

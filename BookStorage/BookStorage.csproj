@@ -144,10 +144,13 @@
     <Content Include="Views\Books\Edit.cshtml" />
     <Content Include="Views\Books\Delete.cshtml" />
     <Content Include="Views\Books\Details.cshtml" />
+    <Content Include="Views\Author\Index.cshtml" />
+    <Content Include="Views\Author\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

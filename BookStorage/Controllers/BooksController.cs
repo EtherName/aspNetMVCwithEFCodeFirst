@@ -13,10 +13,10 @@ namespace BookStorage.Controllers
         //RepositoryFactory rf { get; set; } = new RepositoryFactory();
         Repository reposit { get; set; } = RepositoryFactory.GetRepository();
         // GET: Books
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-            reposit.GetAllBooks();
-            return View(reposit.GetAllBooks());
+            //reposit.GetAllBooks(id);
+            return View(reposit.GetAllBooks(id));
         }
 
         // GET: Books/Details/5

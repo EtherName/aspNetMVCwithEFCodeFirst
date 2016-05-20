@@ -48,6 +48,8 @@ namespace DataService.Repositories
         public override void AddBook(Book book)
         {
             context.Books.Add(book);
+            var amount = context.Authors.First(x => x.Id == book.AAuthor.Id).BookAmount;
+            context.Authors.First(x => x.Id == book.AAuthor.Id).BookAmount += amount == null ? 0 : 1;
             context.SaveChanges();
         }
         public override void AddAuthor(Author author)
@@ -74,9 +76,11 @@ namespace DataService.Repositories
         }
         public override void EditAuthor(Author author)
         {
-            var _author = context.Authors.First(x => x.Id == author.Id && x.FirstName == author.FirstName && x.LastName == author.LastName);
-            _author.FirstName = author.FirstName;
-            _author.LastName = author.LastName;
+            //var _author = context.Authors.First(x => x.Id == author.Id);
+            //_author.FirstName = author.FirstName;
+            //_author.LastName = author.LastName;
+            context.Authors.First(x => x.Id == author.Id).FirstName = author.FirstName;
+            context.Authors.First(x => x.Id == author.Id).LastName = author.LastName;
             context.SaveChanges();
         }
         //public override void EditBookVisit(BookVisit bookVisit)
@@ -90,6 +94,8 @@ namespace DataService.Repositories
         public override void DeleteBook(Book book)
         {
             context.Books.Remove(book);
+            var amount = context.Authors.First(x => x.Id == book.AAuthor.Id).BookAmount;
+            context.Authors.First(x => x.Id == book.AAuthor.Id).BookAmount -= amount == null ? 0 : 1;
             context.SaveChanges();
         }
         public override void DeleteAuthor(Author author)
