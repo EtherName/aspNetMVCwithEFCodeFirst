@@ -15,6 +15,7 @@ namespace BookStorage.Controllers
         // GET: Books
         public ActionResult Index(int id)
         {
+            ViewData["idAuthor"] = id;
             return View(reposit.GetAllBooks(id));
         }
 
@@ -31,7 +32,8 @@ namespace BookStorage.Controllers
         // GET: Books/Create
         public ActionResult Create(int id)
         {
-            return View(reposit.GetAllAuthors().First(x => x.Id == id));
+            ViewData["idAuthor"] = id;
+            return View();
         }
 
         // POST: Books/Create
@@ -45,7 +47,7 @@ namespace BookStorage.Controllers
                 {
                     reposit.AddBook(book);
                 }
-                return RedirectToAction("Index", new { id = book.AAuthor.Id });
+                return RedirectToAction("Index", new { id = (int)ViewData["idAuthor"] });
             }
             catch
             {
