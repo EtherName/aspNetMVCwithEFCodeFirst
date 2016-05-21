@@ -12,11 +12,13 @@ namespace BookStorage.Controllers
     {
         //RepositoryFactory rf { get; set; } = new RepositoryFactory();
         Repository reposit { get; set; } = RepositoryFactory.GetRepository();
+        int _id = 0;
         // GET: Books
         public ActionResult Index(int id)
         {
             //reposit.GetAllBooks(id);
-            return View(reposit.GetAllBooks(id));
+            _id = id;
+            return View(reposit.GetAllBooks(_id));
         }
 
         // GET: Books/Details/5
@@ -43,8 +45,11 @@ namespace BookStorage.Controllers
             {
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
+                {
+                    book.AAuthor = reposit.GetAllAuthors().First(x => x.Id == _id);
                     reposit.AddBook(book);
-                return RedirectToAction("Index");
+                }
+                return RedirectToAction("Index", new { id = _id });
             }
             catch
             {
@@ -67,7 +72,7 @@ namespace BookStorage.Controllers
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                     reposit.EditBook(book);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = _id });
             }
             catch
             {
@@ -89,7 +94,7 @@ namespace BookStorage.Controllers
             {
                 // TODO: Add delete logic here
                 reposit.DeleteBook(book);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = _id });
             }
             catch
             {

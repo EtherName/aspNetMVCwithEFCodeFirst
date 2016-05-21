@@ -20,7 +20,7 @@ namespace BookStorage.Controllers
         // GET: Author/Details/5
         public ActionResult Details(int id)
         {
-            return View(Url.Action("Index", "Books", id));
+            return View();
         }
 
         // GET: Author/Create
