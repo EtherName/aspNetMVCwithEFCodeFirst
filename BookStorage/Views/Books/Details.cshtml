@@ -19,7 +19,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Date)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
     </tr>
 
     @foreach (var item in Model.Reverse())
@@ -28,10 +30,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
         </tr>
     }
 
 </table>
+@*<div>
+    @section Scripts
+</div>*@
 <div>
     @Html.ActionLink("Back to List", "Index", new { id = Model.First().ABook.AAuthor.Id })
 </div>
+

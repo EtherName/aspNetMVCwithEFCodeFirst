@@ -29,6 +29,6 @@ namespace DataService.Repositories
 
         public abstract void DeleteBook(Book book);
         public abstract void DeleteAuthor(Author author);
-        public abstract void DeleteBookVisit(BookVisit bookVisit);
+        //public abstract void DeleteBookVisit(BookVisit bookVisit);
     }
 }

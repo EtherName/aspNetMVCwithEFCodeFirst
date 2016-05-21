@@ -12,19 +12,16 @@ namespace BookStorage.Controllers
     {
         //RepositoryFactory rf { get; set; } = new RepositoryFactory();
         Repository reposit { get; set; } = RepositoryFactory.GetRepository();
-        int _id = 0;
         // GET: Books
         public ActionResult Index(int id)
         {
-            //reposit.GetAllBooks(id);
-            _id = id;
-            return View(reposit.GetAllBooks(_id));
+            return View(reposit.GetAllBooks(id));
         }
 
         // GET: Books/Details/5
         public ActionResult Details(int id)
         {
-            reposit.AddBookVisit(new BookVisit() { ABook = reposit.GetAllBooks().First(x => x.Id == id), Date = DateTime.Now });
+            reposit.AddBookVisit(new BookVisit() { ABook = reposit.GetAllBooks().First(x => x.Id == id), Date = DateTime.UtcNow });
             return View(reposit.GetAllBookVisits(id));//reposit.GetAllBookVisits(id).Select(x => new { x.ABook, x.Date, reposit.GetAllBookVisits(id).Count()}));
             //return View(from x in reposit.GetAllBookVisits(id)
             //            //join o in orders on c.ID equals o.ID
@@ -32,9 +29,9 @@ namespace BookStorage.Controllers
         }
 
         // GET: Books/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
+            return View(reposit.GetAllAuthors().First(x => x.Id == id));
         }
 
         // POST: Books/Create
@@ -46,10 +43,9 @@ namespace BookStorage.Controllers
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
                 {
-                    book.AAuthor = reposit.GetAllAuthors().First(x => x.Id == _id);
                     reposit.AddBook(book);
                 }
-                return RedirectToAction("Index", new { id = _id });
+                return RedirectToAction("Index", new { id = book.AAuthor.Id });
             }
             catch
             {
@@ -58,7 +54,7 @@ namespace BookStorage.Controllers
         }
 
         // GET: Books/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id) //, authorId = item.AAuthor.Id 
         {
             return View(reposit.GetAllBooks().First(x=> x.Id == id));
         }
@@ -72,7 +68,7 @@ namespace BookStorage.Controllers
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                     reposit.EditBook(book);
-                return RedirectToAction("Index", new { id = _id });
+                return RedirectToAction("Index", new { id = reposit.GetAllBooks().First(y=>y.Id == book.Id).AAuthor.Id });
             }
             catch
             {
@@ -94,7 +90,7 @@ namespace BookStorage.Controllers
             {
                 // TODO: Add delete logic here
                 reposit.DeleteBook(book);
-                return RedirectToAction("Index", new { id = _id });
+                return RedirectToAction("Index", new { id = reposit.GetAllBooks().First(y => y.Id == book.Id).AAuthor.Id });
             }
             catch
             {

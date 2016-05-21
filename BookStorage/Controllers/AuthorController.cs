@@ -49,17 +49,18 @@ namespace BookStorage.Controllers
         // GET: Author/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View(reposit.GetAllAuthors().First(x => x.Id == id));
         }
 
         // POST: Author/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Author author)
         {
             try
             {
                 // TODO: Add update logic here
-
+                if (ModelState.IsValid)
+                    reposit.EditAuthor(author);
                 return RedirectToAction("Index");
             }
             catch
@@ -71,17 +72,18 @@ namespace BookStorage.Controllers
         // GET: Author/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(reposit.GetAllAuthors().First(x => x.Id == id));
         }
 
         // POST: Author/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Author author)
         {
             try
             {
                 // TODO: Add delete logic here
-
+                if (ModelState.IsValid)
+                    reposit.DeleteAuthor(author);
                 return RedirectToAction("Index");
             }
             catch

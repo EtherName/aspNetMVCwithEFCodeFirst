@@ -16,8 +16,8 @@ namespace DataService.Entities
         [Required(ErrorMessage = "Empty Date")]
         public DateTime Date { get; set; }
         [DefaultValue(0)]
-        //public int Quantity { get; set; }
-        //[Column("BookId")]
+        public int Quantity { get; set; }
+        [Column("BookId")]
         public virtual Book ABook { get; set; }
     }
 }
