@@ -22,5 +22,11 @@ namespace DataService
         //    modelBuilder.Configurations.Add(new BookConfig());
         //    modelBuilder.Configurations.Add(new BookVisitConfig());
         //}
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+
+        //    modelBuilder.Entity<Author>()
+        //        .WillCascadeOnDelete(true);
+        //}
     }
 }

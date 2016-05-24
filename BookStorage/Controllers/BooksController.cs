@@ -23,15 +23,13 @@ namespace BookStorage.Controllers
         public ActionResult Details(int id)
         {
             reposit.AddBookVisit(new BookVisit() { ABook = reposit.GetAllBooks().First(x => x.Id == id), Date = DateTime.UtcNow.Date });
-            return View(reposit.GetAllBooks().First(x=>x.Id == id));//reposit.GetAllBookVisits(id).Select(x => new { x.ABook, x.Date, reposit.GetAllBookVisits(id).Count()}));
-            //return View(from x in reposit.GetAllBookVisits(id)
-            //            //join o in orders on c.ID equals o.ID
-            //select new { x.ABook, x.Date, reposit.GetAllBookVisits(id).Count()});
+            return View(reposit.GetAllBooks().First(x=>x.Id == id));
         }
 
         // GET: Books/Create
         public ActionResult Create(int id)
         {
+            ViewData["idAuthor"] = id;
             return View();
         }
 
@@ -42,9 +40,10 @@ namespace BookStorage.Controllers
             try
             {
                 // TODO: Add insert logic here
+                ViewData["idAuthor"] = id;
                 if (ModelState.IsValid)
                     reposit.AddBook(new Book() {Id= book.Id, ISBN=book.ISBN, Title=book.Title, Years=book.Years, AAuthor= reposit.GetAllAuthors().First(x => x.Id == id) });
-                return RedirectToAction("Index", new { id = reposit.GetAllBooks().First(y => y.Id == book.Id).AAuthor.Id });
+                return RedirectToAction("Index", new { id = id });
             }
             catch
             {
@@ -67,7 +66,7 @@ namespace BookStorage.Controllers
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                     reposit.EditBook(book);
-                return RedirectToAction("Index", new { id = reposit.GetAllBooks().First(y=>y.Id == book.Id).AAuthor.Id });
+                return RedirectToAction("Index", new { id = id });
             }
             catch
             {
@@ -78,6 +77,7 @@ namespace BookStorage.Controllers
         // GET: Books/Delete/5
         public ActionResult Delete(int id)
         {
+            ViewData["idAuthor"] = id;
             return View(reposit.GetAllBooks().First(x => x.Id == id));
         }
 
@@ -88,8 +88,9 @@ namespace BookStorage.Controllers
             try
             {
                 // TODO: Add delete logic here
-                reposit.DeleteBook(book);
-                return RedirectToAction("Index", new { id = reposit.GetAllBooks().First(y => y.Id == book.Id).AAuthor.Id });
+                ViewData["idAuthor"] = id;
+                reposit.DeleteBook(reposit.GetAllBooks().First(y => y.Id == book.Id));
+                return RedirectToAction("Index", new { id = id });
             }
             catch
             {

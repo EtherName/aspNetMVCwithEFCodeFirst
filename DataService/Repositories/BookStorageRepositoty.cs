@@ -50,9 +50,10 @@ namespace DataService.Repositories
             context.Books.Add(book);
             Author author = context.Authors.First(x => x.Id == book.AAuthor.Id);
             if (author != null)
-                author.BookAmount = context.Books.Count();
-            
-            context.SaveChanges();
+            {
+                author.BookAmount +=1;
+                context.SaveChanges();
+            }
         }
         public override void AddAuthor(Author author)
         {
@@ -64,9 +65,13 @@ namespace DataService.Repositories
             var visit = context.BookVisits.FirstOrDefault(x => x.Date == bookVisit.Date);
             if (visit == null)
             {
-                context.BookVisits.Add(bookVisit);
+                context.BookVisits.Add(new BookVisit() {Date = bookVisit.Date, ABook = bookVisit.ABook });
+                context.BookVisits.First(x => x.Date == bookVisit.Date).Quantity += 1;
             }
-            bookVisit.Quantity += 1;
+            else
+            {
+                visit.Quantity += 1;
+            }
             context.SaveChanges();
         }
 
@@ -83,7 +88,6 @@ namespace DataService.Repositories
             var _author = context.Authors.First(x => x.Id == author.Id);
             _author.FirstName = author.FirstName;
             _author.LastName = author.LastName;
-            _author.BookAmount = author.Books.Count();
             context.SaveChanges();
         }
         //public override void EditBookVisit(BookVisit bookVisit)
@@ -99,8 +103,10 @@ namespace DataService.Repositories
             context.Books.Remove(book);
             var author = context.Authors.First(x => x.Id == book.AAuthor.Id);
             if (author != null)
-                author.BookAmount = context.Books.Count();
-            context.SaveChanges();
+            {
+                author.BookAmount -= 1;
+                context.SaveChanges();
+            }
         }
         public override void DeleteAuthor(Author author)
         {

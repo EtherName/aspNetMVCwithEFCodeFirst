@@ -5,13 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+@{
+    int idAuthor = (int)ViewData["idAuthor"];
+}
 
+@Html.AntiForgeryToken()
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
+        @*@Html.HiddenFor(model=> model.AAuthor, ViewData["aAuthor"]);*@
+
     <div class="form-horizontal">
         <h4>Book</h4>
         <hr />
@@ -37,6 +42,7 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Years, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Years, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model=> model.AAuthor)
             </div>
         </div>
 
@@ -49,7 +55,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index", new { id = Model.AAuthor.Id })
+    @Html.ActionLink("Back to List", "Index", new { id = idAuthor })
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
