@@ -22,8 +22,8 @@ namespace BookStorage.Controllers
         // GET: Books/Details/5
         public ActionResult Details(int id)
         {
-            reposit.AddBookVisit(new BookVisit() { ABook = reposit.GetAllBooks().First(x => x.Id == id), Date = DateTime.UtcNow });
-            return View(reposit.GetAllBookVisits(id));//reposit.GetAllBookVisits(id).Select(x => new { x.ABook, x.Date, reposit.GetAllBookVisits(id).Count()}));
+            reposit.AddBookVisit(new BookVisit() { ABook = reposit.GetAllBooks().First(x => x.Id == id), Date = DateTime.UtcNow.Date });
+            return View(reposit.GetAllBooks().First(x=>x.Id == id));//reposit.GetAllBookVisits(id).Select(x => new { x.ABook, x.Date, reposit.GetAllBookVisits(id).Count()}));
             //return View(from x in reposit.GetAllBookVisits(id)
             //            //join o in orders on c.ID equals o.ID
             //select new { x.ABook, x.Date, reposit.GetAllBookVisits(id).Count()});
@@ -32,22 +32,19 @@ namespace BookStorage.Controllers
         // GET: Books/Create
         public ActionResult Create(int id)
         {
-            ViewData["idAuthor"] = id;
             return View();
         }
 
         // POST: Books/Create
         [HttpPost]
-        public ActionResult Create(Book book)
+        public ActionResult Create(int id, Book book)
         {
             try
             {
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
-                {
-                    reposit.AddBook(book);
-                }
-                return RedirectToAction("Index", new { id = (int)ViewData["idAuthor"] });
+                    reposit.AddBook(new Book() {Id= book.Id, ISBN=book.ISBN, Title=book.Title, Years=book.Years, AAuthor= reposit.GetAllAuthors().First(x => x.Id == id) });
+                return RedirectToAction("Index", new { id = reposit.GetAllBooks().First(y => y.Id == book.Id).AAuthor.Id });
             }
             catch
             {
@@ -56,7 +53,7 @@ namespace BookStorage.Controllers
         }
 
         // GET: Books/Edit/5
-        public ActionResult Edit(int id) //, authorId = item.AAuthor.Id 
+        public ActionResult Edit(int id)
         {
             return View(reposit.GetAllBooks().First(x=> x.Id == id));
         }

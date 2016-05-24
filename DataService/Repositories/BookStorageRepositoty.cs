@@ -61,15 +61,12 @@ namespace DataService.Repositories
         }
         public override void AddBookVisit(BookVisit bookVisit)
         {
-            var visit = context.BookVisits.First(x => x.Date.Date == bookVisit.Date.Date);
+            var visit = context.BookVisits.FirstOrDefault(x => x.Date == bookVisit.Date);
             if (visit == null)
             {
                 context.BookVisits.Add(bookVisit);
             }
-            else
-            {
-                visit.Quantity += 1;
-            }
+            bookVisit.Quantity += 1;
             context.SaveChanges();
         }
 

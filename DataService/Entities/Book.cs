@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.DataTable.Net.Wrapper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,5 +26,31 @@ namespace DataService.Entities
         [Column("AuthorId")]
         public virtual Author AAuthor { get; set; }
         public virtual IEnumerable<BookVisit> BookVisits { get; set; }
+
+        public string GoogleChartData
+        {
+            get
+            {
+
+                //let's instantiate the DataTable.
+                var dt = new DataTable();
+                dt.AddColumn(new Column(ColumnType.Date, "Day", "Day"));
+                dt.AddColumn(new Column(ColumnType.Number, "Count", "Count"));
+
+                foreach (var visit in BookVisits)
+                {
+                    Row r = dt.NewRow();
+                    r.AddCellRange(new Cell[]
+                    {
+                        new Cell(visit.Date),
+                        new Cell(visit.Quantity)
+                    });
+                    dt.AddRow(r);
+                }
+
+                //Let's create a Json string as expected by the Google Charts API.
+                return dt.GetJson();
+            }
+        }
     }
 }

@@ -82,8 +82,7 @@ namespace BookStorage.Controllers
             try
             {
                 // TODO: Add delete logic here
-                if (ModelState.IsValid)
-                    reposit.DeleteAuthor(author);
+                reposit.DeleteAuthor(reposit.GetAllAuthors().First(x => x.Id == id));
                 return RedirectToAction("Index");
             }
             catch

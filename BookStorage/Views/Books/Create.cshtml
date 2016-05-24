@@ -5,10 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h2>Create</h2>
 
-@using (Html.BeginForm())
+
+@using (Html.BeginForm()) 
 {
-
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
@@ -48,10 +49,7 @@
 }
 
 <div>
-    @{
-        int idAuthor = (int)ViewData["idAuthor"];
-    }
-    @Html.ActionLink("Back to List", "Index", new { id = idAuthor })
+    @Html.ActionLink("Back to List", "Index", new { id = Model.AAuthor.Id })
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
