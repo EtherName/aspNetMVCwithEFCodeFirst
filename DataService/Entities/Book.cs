@@ -31,13 +31,13 @@ namespace DataService.Entities
         {
             get
             {
-
+                BookStorageDBContext context = new BookStorageDBContext();
                 //let's instantiate the DataTable.
                 var dt = new DataTable();
                 dt.AddColumn(new Column(ColumnType.Date, "Day", "Day"));
                 dt.AddColumn(new Column(ColumnType.Number, "Count", "Count"));
 
-                foreach (var visit in BookVisits)
+                foreach (var visit in context.BookVisits.Where(x => x.ABook.Id == this.Id))
                 {
                     Row r = dt.NewRow();
                     r.AddCellRange(new Cell[]
@@ -51,6 +51,7 @@ namespace DataService.Entities
                 //Let's create a Json string as expected by the Google Charts API.
                 return dt.GetJson();
             }
+
         }
     }
 }

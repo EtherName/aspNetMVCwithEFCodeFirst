@@ -7,7 +7,7 @@ using DataService.Entities;
 
 namespace DataService.Repositories
 {
-    internal class BookStorageRepositoty : Repository
+    internal sealed class BookStorageRepositoty : Repository
     {
         private BookStorageDBContext context = new BookStorageDBContext();
 
@@ -34,7 +34,7 @@ namespace DataService.Repositories
 
         public override IEnumerable<Book> GetAllBooksWithVisits(int authorId)
         {
-            return context.Books.Include("BookVisits").Where(x=> x.AAuthor.Id == authorId).ToList();
+            return context.Books.Include("BookVisits").Where(x => x.AAuthor.Id == authorId).ToList();
         }
         public override IEnumerable<Book> GetAllBooks(int authorId)
         {
@@ -51,13 +51,13 @@ namespace DataService.Repositories
             Author author = context.Authors.First(x => x.Id == book.AAuthor.Id);
             if (author != null)
             {
-                author.BookAmount +=1;
-                context.SaveChanges();
+                author.BookAmount += 1;
             }
+            context.SaveChanges();
         }
         public override void AddAuthor(Author author)
         {
-            context.Authors.Add(new Author() {FirstName = author.FirstName, LastName=author.LastName, BookAmount= 0});
+            context.Authors.Add(new Author() { FirstName = author.FirstName, LastName = author.LastName, BookAmount = 0 });
             context.SaveChanges();
         }
         public override void AddBookVisit(BookVisit bookVisit)
@@ -65,8 +65,7 @@ namespace DataService.Repositories
             var visit = context.BookVisits.FirstOrDefault(x => x.Date == bookVisit.Date);
             if (visit == null)
             {
-                context.BookVisits.Add(new BookVisit() {Date = bookVisit.Date, ABook = bookVisit.ABook });
-                context.BookVisits.First(x => x.Date == bookVisit.Date).Quantity += 1;
+                context.BookVisits.Add(new BookVisit() { Date = bookVisit.Date, ABook = bookVisit.ABook, Quantity = 1 });
             }
             else
             {
@@ -100,19 +99,26 @@ namespace DataService.Repositories
 
         public override void DeleteBook(Book book)
         {
-            context.Books.Remove(book);
+
             var author = context.Authors.First(x => x.Id == book.AAuthor.Id);
+            context.BookVisits.RemoveRange(context.BookVisits.Where(x => x.ABook.Id == book.Id));
+            context.Books.Remove(book);
             if (author != null)
             {
                 author.BookAmount -= 1;
-                context.SaveChanges();
             }
+            context.SaveChanges();
         }
         public override void DeleteAuthor(Author author)
         {
-            context.Authors.Remove(author);
+            context.BookVisits.RemoveRange(context.BookVisits.Where(x => x.ABook.AAuthor.Id == author.Id));
+            context.Books.RemoveRange(context.Books.Where(x => x.AAuthor.Id == author.Id));
+            context.Authors.Remove(context.Authors.First(x => x.Id == author.Id));//author);
             context.SaveChanges();
         }
+
+        
+
         //public override void DeleteBookVisit(BookVisit bookVisit)
         //{
         //    context.BookVisits.Remove(bookVisit);
