@@ -34,7 +34,7 @@ namespace BookStorage.Controllers
         }
 
         // POST: Books/Create
-        [HttpPost]
+        [HttpPost]        
         public ActionResult Create(int id, Book book)
         {
             try
